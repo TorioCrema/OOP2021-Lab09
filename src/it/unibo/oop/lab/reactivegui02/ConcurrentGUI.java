@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
- * 
+ * Implements a reactive GUI with increasing and decreasing counter.
  *
  */
 public class ConcurrentGUI extends JFrame {
@@ -27,7 +27,7 @@ public class ConcurrentGUI extends JFrame {
     private final JButton stop = new JButton("stop");
 
     /**
-     * 
+     * Builds a new ConcurrentGUI.
      */
     public ConcurrentGUI() {
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -106,10 +106,16 @@ public class ConcurrentGUI extends JFrame {
             return this.inc;
         }
 
+        /**
+         * Sets the value of inc to true.
+         */
         public void setInc() {
             this.inc = true;
         }
 
+        /**
+         * Sets the value of inc to false.
+         */
         public void setDec() {
             this.inc = false;
         }
