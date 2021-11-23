@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
  * Implements a reactive GUI with increasing and decreasing counter.
  *
  */
-public class ConcurrentGUI extends JFrame {
+public final class ConcurrentGUI extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private static final double WIDTH_PERC = 0.2;
@@ -76,8 +76,8 @@ public class ConcurrentGUI extends JFrame {
 
         @Override
         public void run() {
-            while (!this.stop) {
-                try {
+            try {
+                while (!this.stop) {
                     final int currCounter = this.counter;
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
@@ -91,10 +91,10 @@ public class ConcurrentGUI extends JFrame {
                         this.counter--;
                     }
                     Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    System.err.println(e.getMessage());
-                    e.printStackTrace();
                 }
+            } catch (InterruptedException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
             }
         }
 
