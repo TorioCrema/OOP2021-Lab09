@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
  * 
  *
  */
-public class AnotherConcurrentGUI extends JFrame {
+public final class AnotherConcurrentGUI extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final double WIDTH_PERC = 0.2;
     private static final double HEIGHT_PERC = 0.1;
@@ -39,7 +39,9 @@ public class AnotherConcurrentGUI extends JFrame {
         this.setVisible(true);
 
         final Agent agent = new Agent();
+        final StopAgent stopAgent = new StopAgent(agent);
         new Thread(agent).start();
+        new Thread(stopAgent).start();
 
         stop.addActionListener(new ActionListener() {
             @Override
@@ -117,8 +119,40 @@ public class AnotherConcurrentGUI extends JFrame {
             this.inc = false;
         }
 
+        /**
+         * Sets the value of stop to true, which causes the thread
+         * of Agent to stop its execution.
+         */
         public void stopCounting() {
             this.stop = true;
         }
+    }
+
+    private class StopAgent implements Runnable {
+
+        private static final int WAIT_TIME = 10_000;
+        private final Agent agent;
+
+        /**
+         * Builds a new StopAgent.
+         * @param agent Agent that the new StopAgent will stop after 10 seconds.
+         */
+        StopAgent(final Agent agent) {
+            this.agent = agent;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(WAIT_TIME);
+                this.agent.stopCounting();
+                AnotherConcurrentGUI.this.up.setEnabled(false);
+                AnotherConcurrentGUI.this.down.setEnabled(false);
+                AnotherConcurrentGUI.this.stop.setEnabled(false);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
